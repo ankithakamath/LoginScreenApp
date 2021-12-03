@@ -20,16 +20,16 @@ class ProfileController: UIViewController{
     
     
     
-   
+    
     @IBAction func uploadButton(_ sender: UIButton) {
-    
-    
+        
+        
         self.imagePickerController.sourceType = .photoLibrary
         self.present(self.imagePickerController, animated: true, completion: nil)
     }
     
     
-
+    
     
     
     override func viewDidLoad() {
@@ -37,7 +37,7 @@ class ProfileController: UIViewController{
         navigationItem.title = "Profile"
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "cancel")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleDismiss))
         profileImage()
-      checkPermissions()
+        checkPermissions()
         imagePickerController.delegate = self
     }
     
@@ -64,7 +64,7 @@ class ProfileController: UIViewController{
         }else{
             print("No acess to photos")
         }
-            
+        
     }
     
     func uploadImageToCloud(fileURL: URL){
@@ -93,16 +93,16 @@ class ProfileController: UIViewController{
         let storageRef = storage.reference()
         let ref = storageRef.child(uid)
         ref.getData(maxSize: 5 * 1024 * 1024) { data ,error in
-          if let error = error {
-          }else {
-            let image = UIImage(data: data!)
-            DispatchQueue.main.async {
-                self.uploadedImage.image = image
+            if let error = error {
+            }else {
+                let image = UIImage(data: data!)
+                DispatchQueue.main.async {
+                    self.uploadedImage.image = image
+                }
             }
-          }
         }
-      }
     }
+}
 
 extension ProfileController: UIImagePickerControllerDelegate,UINavigationControllerDelegate{
     

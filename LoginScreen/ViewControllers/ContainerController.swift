@@ -36,7 +36,7 @@ class ContainerController: UIViewController {
     func configureHomeController(){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let homeVC = storyboard.instantiateViewController(withIdentifier: "HomeViewController") as! HomeViewController
-       // let homeController = HomeViewController()
+        // let homeController = HomeViewController()
         centerController = UINavigationController(rootViewController: homeVC)
         homeVC.delegate = self
         view.addSubview(centerController.view)
@@ -46,7 +46,7 @@ class ContainerController: UIViewController {
     }
     
     func presentLoginScreen(){
-     
+        
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let loginVC = storyboard.instantiateViewController(withIdentifier: Constants.Storyboard.loginViewController) as! LoginViewController
         loginVC.modalPresentationStyle = .fullScreen
@@ -112,22 +112,22 @@ class ContainerController: UIViewController {
             let navVC = UINavigationController(rootViewController: profileVC)
             navVC.modalPresentationStyle = .fullScreen
             self.present(navVC, animated: true, completion: nil)
-       
             
-        case .Inbox:
+            
+        case .Reminders:
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let inboxVC = storyboard.instantiateViewController(withIdentifier: "InboxController") as! InboxController
-            let navVC = UINavigationController(rootViewController: inboxVC)
+            let reminderVC = storyboard.instantiateViewController(withIdentifier: "ReminderController") as! ReminderController
+            let navVC = UINavigationController(rootViewController: reminderVC)
             navVC.modalPresentationStyle = .fullScreen
             self.present(navVC, animated: true, completion: nil)
-       
+            
         case .Settings:
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             let settingsVC = storyboard.instantiateViewController(withIdentifier: "SettingsController") as! SettingsController
             let navVC = UINavigationController(rootViewController: settingsVC)
             navVC.modalPresentationStyle = .fullScreen
             self.present(navVC, animated: true, completion: nil)
-       
+            
         case .logout:
             Signout()
             
@@ -137,7 +137,7 @@ class ContainerController: UIViewController {
             let navVC = UINavigationController(rootViewController: archiveVC)
             navVC.modalPresentationStyle = .fullScreen
             self.present(navVC, animated: true, completion: nil)
-       
+            
         }
     }
     

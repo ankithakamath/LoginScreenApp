@@ -228,7 +228,40 @@ struct NetworkManager {
         
     }
     
-}
+    func fetchRemindNotes(completion: @escaping(Result<[NoteItem], Error>) -> Void) {
+            
+            guard let uid = NetworkManager.manager.getUID() else { return }
+            let nilValue: Date? = nil
 
+   
+            let db = Firestore.firestore()
+        db.collection("notes").whereField("reminderTime", isNotEqualTo: nilValue ).limit(to: 8).getDocuments { snapshot,error in
+                var notes :[NoteItem] = []
+                
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                if snapshot != nil {
+                    
+                    for document in snapshot!.documents {
+                        let data = document.data()
+                        let id = document.documentID
+                        let title = data["title"] as? String ?? ""
+                        let description = data["description"] as? String ?? ""
+                        let uid = data["uid"] as? String ?? ""
+                        let time = (data["time"] as? Timestamp)?.dateValue() ?? Date()
+                        let isArchive = data["isArchive"] as? Bool ?? false
+                        let note = NoteItem(id: id, title: title, description: description, uid: uid, time: time, isArchive: isArchive)
+                        notes.append(note)
+                    
+                }
+                    lastDocument = snapshot!.documents.last
+                completion(.success(notes))
+            }
+        }
+    
+}
+}
 
 

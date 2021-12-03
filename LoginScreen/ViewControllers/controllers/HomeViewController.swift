@@ -50,7 +50,7 @@ class HomeViewController: UIViewController{
     func fetchData() {
         
         NetworkManager.manager.fetchNotes(archived: false) { result in
-
+            
             switch result {
             case .success(let notes):
                 self.updateCollectionView(notes: notes)
@@ -61,24 +61,11 @@ class HomeViewController: UIViewController{
         }
     }
     
-
-        
-          
-        
-        
-    
-    
     func fetchNoteRealm(){
         RealmManager.shared.fetchNotes()
         // self.notesRealm = notesArray
-
+        
     }
-    
-    
-    
-    
-    
-    
     
     private func configuresearchController(){
         searchcontroller.loadViewIfNeeded()
@@ -168,7 +155,7 @@ class HomeViewController: UIViewController{
         
         navigationItem.title = "Notes"
         navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "menu")?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleMenuToggle))
-       
+        
         let addButton = UIBarButtonItem(image: UIImage(systemName: "folder.fill.badge.plus"), style: .done, target: self, action: #selector(handleAddNote))
         toggleButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet.below.rectangle"), style: .done, target: self, action: #selector(toggleButtonTapped))
         //
@@ -186,7 +173,7 @@ class HomeViewController: UIViewController{
             flag = !flag
             width = (view.frame.width - 40)
             toggleButton.image = UIImage(systemName: "list.bullet.below.rectangle")
-            print("\(width)+++++++++++++++++++++++++++++++++++++++++ if")
+           
             collectionView.reloadData()
             
         }else {
@@ -195,20 +182,12 @@ class HomeViewController: UIViewController{
             width = (view.frame.width - 40) / 2
             toggleButton.image = UIImage(systemName: "square.grid.2x2")
             
-            print("\(width)+++++++++++++++++++++++++++++++++++++++++ else")
+           
             collectionView.reloadData()
         }
         collectionView.reloadData()
         
     }
-    
-//    @objc func handleDelete(_ sender: UIButton){
-//        let note = noteArray[sender.tag]
-//        NetworkManager.manager.deleteNote(note: note)
-//        RealmManager.shared.deleteNote(note: note)
-//        noteArray.remove(at: sender.tag)
-//        collectionView.reloadData()
-//    }
     
     
     
@@ -255,29 +234,13 @@ extension HomeViewController: UICollectionViewDelegate,UICollectionViewDataSourc
         cell.dateLabel.text = getCurrentDate(date: note.time)
         cell.currentNote = note
         cell.delegate = self
-//        if searching{
-//
-//            cell.title.text = searchedText[indexPath.row].title
-//            cell.noteDescription.text = searchedText[indexPath.row].description
-////            cell.deleteButton.tag = indexPath.row
-////            cell.deleteButton.addTarget(self, action: #selector(handleDelete), for: .touchUpInside)
-//
-//        }
-//        else {
-//
-//            let note = noteArray[indexPath.row]
-//            cell.title.text = note.title
-//            cell.noteDescription.text = note.description
-//            cell.dateLabel.text = getCurrentDate(date: note.time)
-////            cell.deleteButton.tag = indexPath.row
-////            cell.deleteButton.addTarget(self, action: #selector(handleDelete), for: .touchUpInside)
-//        }
+        
         cell.title.widthAnchor.constraint(equalToConstant:width).isActive = true
         return cell
-
+        
     }
     
-   
+    
 }
 
 
@@ -313,12 +276,12 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout{
     
 }
 
-    
+
 
 extension HomeViewController: UISearchResultsUpdating,UISearchBarDelegate{
     
     func updateSearchResults(for searchController: UISearchController) {
-        //let count = searchcontroller.searchBar.text?.count
+       
         let searchText = searchController.searchBar.text!
         //if search text empty
         if !searchText.isEmpty {
@@ -363,19 +326,19 @@ extension HomeViewController: UIScrollViewDelegate{
         let height = scrollView.frame.size.height
         
         if offset>contentHeight - height{
-           
+            
             guard hasMoreNotes else {return}
             guard !fetchingMoreNotes else{
                 return
             }
-            print("---------------------------------------------------")
+           
             NetworkManager.manager.fetchMoreNotes { notes in
                 if notes.count < 8 {
-                    print("======================================================")
+                  
                     self.hasMoreNotes = false
                 }
                 self.noteArray.append(contentsOf: notes)
-              
+                
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
@@ -386,4 +349,4 @@ extension HomeViewController: UIScrollViewDelegate{
     
 }
 
-       
+

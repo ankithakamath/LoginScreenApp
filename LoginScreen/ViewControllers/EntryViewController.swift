@@ -17,13 +17,14 @@ class EntryViewController: UIViewController{
     var noteArray = [NoteItem]()
     var isNew: Bool = true
     var note: NoteItem?
-    var remindTime: Date? = nil
+    var reminder: Date? = nil
     let uid = Auth.auth().currentUser?.uid
     
     
     @IBOutlet var titleField: UITextField!
     @IBOutlet var noteField: UITextView!
    
+    @IBOutlet weak var reminderTime: UIDatePicker!
     
     //public var completion:((String, String) -> Void)/
     
@@ -35,31 +36,24 @@ class EntryViewController: UIViewController{
         }else{
         let save = UIBarButtonItem(title: "Save", style: .done, target: self, action: #selector(didTapSave))
         let archiveButton = UIBarButtonItem(image: UIImage(named: "arc"), style: .plain, target: self, action: #selector(archiveNote))
-            let remindButton = UIBarButtonItem(image: UIImage(named: "reminder"), style: .plain, target: self, action: #selector(navigatePicker))
-            navigationItem.rightBarButtonItems = [remindButton, archiveButton, save]
+           
+            navigationItem.rightBarButtonItems = [ archiveButton, save]
        
     }
         newData()
     }
     
-    @objc func navigatePicker() {
-        let pickerScreen = storyboard!.instantiateViewController(withIdentifier: "ReminderController") as! ReminderController
-                        
-            navigationController?.pushViewController(pickerScreen, animated: true)
-            
-            pickerScreen.completion = { remindDate in
-                DispatchQueue.main.async {
-                    self.navigationController?.popViewController(animated: true)
-                    
-                    self.remindTime = remindDate
-                }
-            }
-        }
+    
+    @IBAction func reminderButton(_ sender: UIButton) {
+        print(".......................................")
+        reminder = reminderTime.date
+        showAlert(title: "notes", message: "reminder set successfully")
+    }
     
     @objc func archiveNote(){
         note!.isArchive = !note!.isArchive
         NetworkManager.manager.updateNote(note: note!)
-        print("44444444444444444444444444444444444444444444444444444")
+      
         navigationController?.popViewController(animated: true)
         
     }
@@ -81,15 +75,18 @@ class EntryViewController: UIViewController{
             if titleField.text == "" || noteField.text == "" {
                 showAlert(title: "Notes", message: "Fields cannot be empty")
             }else if isNew{
-                let newNote: [String: Any] = ["title": title, "description": noteDescription,"uid": uid!,"time" : Date(),"isArchive": false]
+                
+
+             let newNote: [String: Any] = ["title": title, "description": noteDescription,"uid": uid!,"time" : Date(),"isArchive": false, "reminderTime": reminder]
+                
                 NetworkManager.manager.addNote(note: newNote)
                 dismiss(animated: true, completion: nil)
                 let note1 = NotesItem()
                 note1.note = noteField.text
                 note1.title = titleField.text!
                 note1.uid = uid!
-                       note1.date = Date()
-                       RealmManager.shared.addNote(note: note1)
+                note1.date = Date()
+                      // RealmManager.shared.addNote(note: note1)
                        
                 self.titleField.text = ""
                        self.noteField.text = ""
@@ -97,14 +94,50 @@ class EntryViewController: UIViewController{
             } else {
                 note?.title = titleField.text!
                 note?.description = noteField.text
+                note?.reminderTime = reminder
                 
+                if note?.reminderTime != nil {
+                    notificationReminder(note: note!)
+
                 NetworkManager.manager.updateNote(note: note!)
                
             }
-        navigationController?.popViewController(animated: true)
+       
         }
-        
+        navigationController?.popViewController(animated: true)
+    }
     
+    func getCurrentDate(date: Date) -> String {
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
+        return dateFormatter.string(from: date)
+        
+    }
+    func notificationReminder(note : NoteItem){
+           
+           UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+               
+               
+               let content = UNMutableNotificationContent()
+               content.title = note.title
+               content.sound = .default
+               content.body = note.description
+               
+               let trigger = UNCalendarNotificationTrigger(dateMatching: Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: note.reminderTime!), repeats: false)
+               
+               let request = UNNotificationRequest(identifier: "some_long_id", content: content, trigger: trigger)
+               UNUserNotificationCenter.current().add(request, withCompletionHandler: {error in
+                   
+                   if error != nil {
+                  
+                   }
+                   
+               })
+               
+           }
+       }
+       
     func printNotes(){
             
             let notes = realmInstance.objects(NotesItem.self)

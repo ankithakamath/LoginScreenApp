@@ -22,7 +22,7 @@ class LoginViewController: UIViewController {
     
     
     let signInConfig = GIDConfiguration.init(clientID: "649628057679-1jmpv55chi8pjq0bbss8ta2pt39p1vko.apps.googleusercontent.com")
-
+    
     @IBOutlet weak var userNameTextField: UITextField!
     
     @IBOutlet weak var passwordTextField: UITextField!
@@ -34,22 +34,22 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         if let token = AccessToken.current,
-               !token.isExpired {
+           !token.isExpired {
             
             let token = token.tokenString
             let request = FBSDKLoginKit.GraphRequest(graphPath: "me", parameters: ["fields": "email,name"], tokenString: token, version: nil, httpMethod: .get)
             request.start { (connection, result, error) in
-                print("\(result)")
+                
             }
         }
-         
-            else
+        
+        else
         {
             FBButton.permissions = ["public_profile", "email"]
             FBButton.delegate = self
             
         }
-       
+        
     }
     
     @IBAction func loginButtontapped(_ sender: Any) {
@@ -65,7 +65,7 @@ class LoginViewController: UIViewController {
                 self.errorLabel.alpha = 1
             }
             else {
-               
+                
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -74,17 +74,17 @@ class LoginViewController: UIViewController {
     
     @IBAction func GoogleButton(_ sender: Any) {
         GIDSignIn.sharedInstance.signIn(with: signInConfig, presenting: self) { user, error in
-           guard error == nil
+            guard error == nil
             else { return }
             guard let user = user else { return }
-
-               let emailAddress = user.profile?.email
+            
+            let emailAddress = user.profile?.email
             self.transitionToHome()
-    }
+        }
     }
     
-   
-  
+    
+    
     func transitionToHome(){
         let setcontroller = HomeViewController()
         present(UINavigationController(rootViewController: setcontroller), animated: true, completion: nil)
@@ -112,8 +112,8 @@ extension LoginViewController: LoginButtonDelegate {
         print("Log Out")
     }
     
-   
-}
     
+}
+
 
 

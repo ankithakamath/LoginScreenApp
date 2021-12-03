@@ -11,7 +11,7 @@ import Firebase
 import FirebaseFirestore
 
 class SignupViewController: UIViewController {
-
+    
     @IBOutlet weak var firstNameTextField: UITextField!
     
     
@@ -43,18 +43,18 @@ class SignupViewController: UIViewController {
     func setUpElements(){
         errorLabel.alpha = 0;
     }
-
+    
     func validateFields() -> String? {
         if firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || secondNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             userNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" || passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == " " {
-        
+            
             return "Please Fill in all the fields"
         }
         let cleanedPassword = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         let cleanedusername = userNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         
         if Utilities.isPasswordValid(cleanedPassword) == false {
-        return "Please make sure the password contains atleast 8 charecters, a number and a special character"
+            return "Please make sure the password contains atleast 8 charecters, a number and a special character"
         }
         else if Utilities.isUsernameValid(cleanedusername) == false{
             return "Please enter valid Mail id"
@@ -67,7 +67,7 @@ class SignupViewController: UIViewController {
     @IBAction func signUpTapped(_ sender: Any) {
         let error = validateFields()
         if error != nil {
-         showError(message: error!)
+            showError(message: error!)
         }
         else {
             
@@ -91,10 +91,10 @@ class SignupViewController: UIViewController {
                     }
                     //homescreen
                     self.transitionToHome()
-                        
                     
+                    
+                }
             }
-        }
             
         }
     }
@@ -104,13 +104,5 @@ class SignupViewController: UIViewController {
     }
     
     
-    func transitionToHome(){
-        /*let homeViewController =
-        storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController) as? HomeViewController
-        
-        view.window?.rootViewController = homeViewController
-        view.window?.makeKeyAndVisible()*/
-    }
-
 }
 

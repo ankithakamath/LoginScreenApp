@@ -77,14 +77,7 @@ class ArchivesController: UIViewController{
     func fetchData() {
         
         NetworkManager.manager.fetchNotes(archived: true) { result in
-            //            if notes.count < 8{
-            //                self.hasMoreNotes = false
-            //            }
-            //            self.noteArray = notes
-            //            DispatchQueue.main.async {
-            //                self.collectionView.reloadData()
-            //            }
-            //        }
+            
             switch result {
             case .success(let notes):
                 self.updateCollectionView(notes: notes)
@@ -134,24 +127,6 @@ extension ArchivesController: UICollectionViewDataSource, UICollectionViewDelega
     }
 }
 
-//extension ArchivesController: UICollectionViewDelegateFlowLayout{
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: width, height: 175)
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        return UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5)
-//    }
-//
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//        return 10
-//    }
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-//        return 10
-//    }
-//
-//}
 
 extension ArchivesController: DeleteCellDelegate {
     

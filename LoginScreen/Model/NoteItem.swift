@@ -15,6 +15,7 @@ struct NoteItem {
     var uid: String
     var time: Date
     var isArchive: Bool
+    var reminderTime: Date?
     
     var dictionary: [String: Any] {
            return[
@@ -23,7 +24,8 @@ struct NoteItem {
            "description": description,
            "uid":uid,
            "time":time,
-            "isArchive": isArchive
+            "isArchive": isArchive,
+           "reminderTime": reminderTime
            ]
        }
 }
